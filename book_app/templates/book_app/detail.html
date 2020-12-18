@@ -26,7 +26,7 @@
     {% if book.upload_user == user %}
       <div class="col-5">
         <form action="{% url 'book:update' book.id %}" method="POST"> {% csrf_token %}
-          <input class="form-control form-control-lg mb-2" name="title" value="{{ book.title|title }}">
+          <input class="form-control form-control-lg mb-2" name="title" value="{{ book }}">
           <p class="mb-2">Added by: {{ book.upload_user|title }}</p>
           <p class="mb-2">Added on: <em>{{ book.create_at|date:"N j, Y @ g:i a" }}</em></p>
           <p class="mb-2">Last updated on: <em>{{ book.update_at|date:"N j, Y @ g:i a" }}</em></p>
@@ -36,7 +36,6 @@
           </div>
           <div class="row">
             <button class="ml-auto btn btn-primary btn-sm mr-3" type="submit">Update</button>
-            <!-- <a href="{% url 'book:delete' book.id %}" class="btn btn-danger btn-sm" onclick="confirmDelete(event)">Delete</a> -->
           </div>
         </form>
         <form class="text-right mt-2" action="{% url 'book:delete' book.id %}" method="POST"> {% csrf_token %}
@@ -52,7 +51,7 @@
       </div>
     {% else %}
       <div class="col-5">
-        <h3 class="text-primary">{{ book.title|title }}</h3>
+        <h3 class="text-primary">{{ book.title }}</h3>
         <p class="mb-2">Added by: {{ book.upload_user|title }}</p>
         <p class="mb-2">Added on: <em>{{ book.create_at|date:"N j, Y @ g:i a" }}</em></p>
         <p class="mb-2">Last updated on: <em>{{ book.update_at|date:"N j, Y @ g:i a" }}</em></p>

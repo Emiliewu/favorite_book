@@ -18,7 +18,7 @@
     <div class="row justify-content-around mt-4">
       {% for book in books %}
       <div class="col-5">
-        <h3 class="text-primary">{{ book.title|title }}</h3>
+        <h3 class="text-primary">{{ book }}</h3>
         <p class="mb-2">Added by: {{ book.upload_user|title }}</p>
         <p class="mb-2">Added on: <em>{{ book.create_at|date:"N j, Y @ g:i a" }}</em></p>
         <p class="mb-2">Last updated on: <em>{{ book.update_at|date:"N j, Y @ g:i a" }}</em></p>

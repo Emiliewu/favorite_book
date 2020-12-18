@@ -44,7 +44,7 @@
         <a href="{% url 'book:all_favorite' %}">All Your Favorite Books</a>
         {% for book in books %}
         <div class="mb-3">
-          <a class="lead" href="{% url 'book:detail' book.id %}">{{ book.title|title }}</a>
+          <a class="lead" href="{% url 'book:detail' book.id %}">{{ book }}</a>
           <p class="m-0">(added by <strong>{{ book.upload_user|title }}</strong>)</p>
           {% if not book.is_favorite %}
             <a class="d-block" href="{% url 'book:add_favorite' book.id %}">Add to Favorites</a>

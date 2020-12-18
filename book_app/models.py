@@ -5,12 +5,12 @@ from django.utils import timezone
 class BookManager(models.Manager):
   def create_validate(self, postData, user):
     errors = {}
-    title = postData["title"]
-    desc = postData["desc"]
+    title = postData["title"].strip()
+    desc = postData["desc"].strip()
     if not title or title.isspace():
       errors["title"] = "The book title cannot be empty"
     elif self.filter(title__iexact=title).exists():
-      errors["title"] = "This book title has already loaded"
+      errors["title"] = "This book title has already uploaded"
     if not desc or desc.isspace():
       errors["desc"] = "The description cannot be empty"
     elif len(desc) <= 5:
@@ -23,18 +23,19 @@ class BookManager(models.Manager):
 
   def update_validate(self, postData, book_id):
     errors = {}
-    title = postData["title"]
-    current_title = self.get(id=book_id).title
-    desc = postData["desc"]
+    title = postData["title"].strip()
+    desc = postData["desc"].strip()
     if not title or title.isspace():
       errors["title"] = "The book title cannot be empty"
-    elif title != current_title and self.filter(title__iexact=title).exists():
-      errors["title"] = "This book title has already loaded"
+    elif self.exclude(id=book_id).filter(title__iexact=title).exists():
+      errors["title"] = "That book title has already uploaded"
     if not desc or desc.isspace():
       errors["desc"] = "The description cannot be empty"
     elif len(desc) <= 5:
       errors["desc"] = "The description should be longer than 5 charactors"
-    if errors or self.filter(title=title, desc=desc).exists():
+    if self.filter(title=title, desc=desc).exists():
+      errors["unchanged"] = "Nothing changed!"
+    if errors:
       return {"is_valid": False, "result": errors}
     self.filter(id=book_id).update(title=title, desc=desc, update_at=timezone.now())
     return {"is_valid": True}  

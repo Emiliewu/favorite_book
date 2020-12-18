@@ -11,7 +11,6 @@ def index(request):
     return redirect(reverse("user:index"))
   user = User.objects.get(id=request.session["user_id"])
   username = user.first_name
-  # books = Book.objects.order_by("-update_at", 'title')
   books = Book.objects.annotate(
     is_favorite=Case(
       When(like_users=user, then=True),
@@ -19,11 +18,9 @@ def index(request):
       output_field=BooleanField()
     )
   ).order_by("-update_at", "title")
-  fav_books = list(user.favorite_books.all())
   context = {
     "username": username,
     "books": books,
-    "fav_books": fav_books
   }
   return render(request, "book_app/index.html", context)
 
@@ -52,7 +49,7 @@ def detail(request, book_id):
 def update(request, book_id):
   if request.method == "POST":
     res = Book.objects.update_validate(request.POST, book_id)
-    if not res["is_valid"] and res["result"]:
+    if not res["is_valid"]:
       errors = res["result"]
       for error in errors.values():
         messages.error(request, error)
